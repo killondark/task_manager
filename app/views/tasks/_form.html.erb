@@ -1,0 +1,41 @@
+<%= form_with(model: task) do |form| %>
+  <% if task.errors.any? %>
+    <div id="error_explanation">
+      <h2>Не удалось сохранить задачу:</h2>
+      <ul>
+        <% task.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :title, "Заголовок" %>
+    <%= form.text_field :title %>
+  </div>
+
+  <div class="field">
+    <%= form.label :description, "Описание" %>
+    <%= form.text_area :description, rows: 5 %>
+  </div>
+
+  <div class="field">
+    <%= form.label :status, "Статус" %>
+    <%= form.select :status, Task.statuses.keys.map { |s| [s.humanize, s] } %>
+  </div>
+
+  <div class="field">
+    <%= form.label :priority, "Приоритет" %>
+    <%= form.number_field :priority %>
+  </div>
+
+  <div class="field">
+    <%= form.label :deadline, "Дедлайн" %>
+    <%= form.datetime_local_field :deadline %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

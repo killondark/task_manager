@@ -1,0 +1,25 @@
+<h1><%= @task.title %></h1>
+
+<p>
+  <strong>Описание:</strong>
+  <%= @task.description %>
+</p>
+
+<p>
+  <strong>Статус:</strong>
+  <%= @task.status.humanize %>
+</p>
+
+<p>
+  <strong>Приоритет:</strong>
+  <%= @task.priority %>
+</p>
+
+<p>
+  <strong>Дедлайн:</strong>
+  <%= @task.deadline ? l(@task.deadline, format: :long) : "—" %>
+</p>
+
+<%= link_to "Редактировать", edit_task_path(@task) %>
+<%= link_to "Удалить", @task, data: { turbo_method: :delete, turbo_confirm: "Удалить задачу?" } %>
+<%= link_to "Назад к списку", tasks_path %>
