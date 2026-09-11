@@ -1,25 +1,38 @@
-<h1><%= @task.title %></h1>
+<% content_for :title, @task.title %>
 
-<p>
-  <strong>Описание:</strong>
-  <%= @task.description %>
-</p>
+<div id="<%= dom_id(@task) %>" class="rounded-xl bg-white p-6 shadow-sm border border-slate-100">
+  <div class="flex items-start justify-between gap-4">
+    <h1 class="text-2xl font-bold text-slate-900"><%= @task.title %></h1>
+    <span class="shrink-0 rounded-full px-3 py-1 text-sm font-medium <%= status_badge_class(@task.status) %>">
+      <%= @task.status.humanize %>
+    </span>
+  </div>
 
-<p>
-  <strong>Статус:</strong>
-  <%= @task.status.humanize %>
-</p>
+  <dl class="mt-6 space-y-4 text-sm">
+    <div>
+      <dt class="font-medium text-slate-500">Описание</dt>
+      <dd class="mt-1 text-slate-800"><%= @task.description.presence || "—" %></dd>
+    </div>
 
-<p>
-  <strong>Приоритет:</strong>
-  <%= @task.priority %>
-</p>
+    <div>
+      <dt class="font-medium text-slate-500">Приоритет</dt>
+      <dd class="mt-1 flex items-center gap-2 text-slate-800">
+        <span class="h-2.5 w-2.5 rounded-full <%= priority_indicator_class(@task.priority) %>"></span>
+        <%= @task.priority %>
+      </dd>
+    </div>
 
-<p>
-  <strong>Дедлайн:</strong>
-  <%= @task.deadline ? l(@task.deadline, format: :long) : "—" %>
-</p>
+    <div>
+      <dt class="font-medium text-slate-500">Дедлайн</dt>
+      <dd class="mt-1 text-slate-800"><%= @task.deadline ? l(@task.deadline, format: :long) : "—" %></dd>
+    </div>
+  </dl>
+</div>
 
-<%= link_to "Редактировать", edit_task_path(@task) %>
-<%= link_to "Удалить", @task, data: { turbo_method: :delete, turbo_confirm: "Удалить задачу?" } %>
-<%= link_to "Назад к списку", tasks_path %>
+<div class="mt-6 flex items-center gap-4 text-sm">
+  <%= link_to "Редактировать", edit_task_path(@task), class: "rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white transition-colors hover:bg-indigo-700" %>
+  <%= button_to "Удалить", @task, method: :delete,
+        data: { turbo_confirm: "Удалить задачу?" },
+        class: "rounded-lg border border-red-200 px-4 py-2 font-medium text-red-600 transition-colors hover:bg-red-50" %>
+  <%= link_to "Назад к списку", tasks_path, class: "text-slate-500 hover:text-slate-700" %>
+</div>

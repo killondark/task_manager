@@ -1,5 +1,9 @@
-<h1>Редактирование задачи</h1>
+<% content_for :title, "Редактирование задачи" %>
 
-<%= render "form", task: @task %>
+<h1 class="mb-6 text-2xl font-bold text-slate-900">Редактирование задачи</h1>
 
-<%= link_to "Назад к задаче", @task %>
+<%= render "tasks/modal_form", task: @task %>
+
+<p class="mt-6">
+  <%= link_to "Назад к задаче", @task, class: "text-sm text-slate-500 hover:text-slate-700" %>
+</p>

@@ -1,0 +1,5 @@
+<%= turbo_frame_tag "task_modal" do %>
+  <%= render layout: "tasks/modal", locals: { task: task } do %>
+    <%= render "tasks/form", task: task %>
+  <% end %>
+<% end %>
