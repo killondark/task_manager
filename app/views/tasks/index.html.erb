@@ -1,42 +1,42 @@
-<h1>Задачи</h1>
+<% content_for :title, "Задачи" %>
 
-<%= link_to "Новая задача", new_task_path %>
+<div class="flex items-center justify-between">
+  <h1 class="text-2xl font-bold text-slate-900">Задачи</h1>
+  <%= link_to "Новая задача",
+        new_task_path,
+        data: { turbo_frame: "task_modal" },
+        class: "rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-indigo-700" %>
+</div>
 
-<%= form_with url: tasks_path, method: :get do |form| %>
+<%= form_with url: tasks_path, method: :get, class: "mt-6 flex flex-wrap items-end gap-4 rounded-xl bg-white p-4 shadow-sm border border-slate-100" do |form| %>
   <div class="field">
-    <%= form.label :status, "Статус" %>
-    <%= form.select :status, options_for_select(["", *Task.statuses.keys], params[:status]), { include_blank: "Все" } %>
+    <%= form.label :status, "Статус", class: "mb-1 block text-sm font-medium text-slate-700" %>
+    <%= form.select :status, options_for_select(["", *Task.statuses.keys], params[:status]),
+          { include_blank: "Все" },
+          class: "rounded-lg border border-slate-200 px-3 py-2 text-slate-800 focus:border-indigo-500 focus:outline-none" %>
   </div>
 
   <div class="field">
-    <%= form.label :priority, "Приоритет" %>
-    <%= form.number_field :priority, value: params[:priority] %>
+    <%= form.label :priority, "Приоритет", class: "mb-1 block text-sm font-medium text-slate-700" %>
+    <%= form.number_field :priority, value: params[:priority], class: "rounded-lg border border-slate-200 px-3 py-2 text-slate-800 focus:border-indigo-500 focus:outline-none" %>
   </div>
 
-  <%= form.submit "Фильтровать" %>
-  <%= link_to "Сбросить", tasks_path %>
+  <div class="flex items-center gap-3">
+    <%= form.submit "Фильтровать", class: "rounded-lg bg-slate-800 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-slate-700" %>
+    <%= link_to "Сбросить", tasks_path, class: "text-sm text-slate-500 hover:text-slate-700" %>
+  </div>
 <% end %>
 
-<table>
-  <thead>
-    <tr>
-      <th>Заголовок</th>
-      <th>Статус</th>
-      <th>Приоритет</th>
-      <th>Действия</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @tasks.each do |task| %>
-      <tr>
-        <td><%= link_to task.title, task %></td>
-        <td><%= task.status.humanize %></td>
-        <td><%= task.priority %></td>
-        <td>
-          <%= link_to "Редактировать", edit_task_path(task) %>
-          <%= link_to "Удалить", task, data: { turbo_method: :delete, turbo_confirm: "Удалить задачу?" } %>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<%= turbo_frame_tag "task_modal" %>
+
+<% if @tasks.any? %>
+  <div id="tasks_list" class="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
+    <%= render partial: "task_card", collection: @tasks, as: :task %>
+  </div>
+<% else %>
+  <div id="tasks_list" class="mt-6">
+    <p class="rounded-xl bg-white p-6 text-center text-slate-500 shadow-sm border border-slate-100">
+      Задач пока нет.
+    </p>
+  </div>
+<% end %>

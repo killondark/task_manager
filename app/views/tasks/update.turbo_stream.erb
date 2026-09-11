@@ -1,0 +1,9 @@
+<%= turbo_stream.replace @task do %>
+  <%= render "tasks/task_card", task: @task %>
+<% end %>
+
+<%= turbo_stream.update "task_modal", "" %>
+
+<%= turbo_stream.prepend "flash" do %>
+  <%= render "layouts/flash_message", type: :notice, message: flash.now[:notice] %>
+<% end %>

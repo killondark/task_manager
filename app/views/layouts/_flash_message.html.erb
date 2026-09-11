@@ -1,0 +1,10 @@
+<div class="mx-auto my-4 flex max-w-5xl items-center justify-between gap-4 rounded-lg px-4 py-3 text-sm shadow-sm animate-fade-in <%= flash_class(type) %>"
+     data-controller="flash">
+  <p class="font-medium"><%= message %></p>
+  <button type="button"
+          class="shrink-0 rounded-md p-1 opacity-60 transition-opacity hover:opacity-100"
+          data-action="flash#close"
+          aria-label="Закрыть">
+    &times;
+  </button>
+</div>

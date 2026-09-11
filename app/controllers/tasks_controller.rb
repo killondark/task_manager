@@ -1,5 +1,5 @@
 class TasksController < ApplicationController
-  before_action :set_task, only: %i[show edit update destroy]
+  before_action :set_task, only: %i[show edit update destroy update_status]
 
   def index
     @tasks = Task.by_status(params[:status]).by_priority(params[:priority])
@@ -16,10 +16,27 @@ class TasksController < ApplicationController
     result = Tasks::Creator.call(task_params: task_params.to_h)
 
     if result.success?
-      redirect_to result.value!, notice: "Задача создана."
+      @task = result.value!
+
+      respond_to do |format|
+        format.turbo_stream do
+          if turbo_frame_request?
+            flash.now[:notice] = "Задача создана."
+          else
+            redirect_to @task, notice: "Задача создана."
+          end
+        end
+        format.html { redirect_to @task, notice: "Задача создана." }
+      end
     else
       @task = result.failure
-      render :new, status: :unprocessable_content
+      respond_to do |format|
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.replace("task_modal", template: "tasks/_modal_form", locals: { task: @task }),
+            status: :unprocessable_content
+        end
+        format.html { render :new, status: :unprocessable_content }
+      end
     end
   end
 
@@ -30,17 +47,53 @@ class TasksController < ApplicationController
     result = Tasks::Updater.call(task: @task, task_params: task_params.to_h)
 
     if result.success?
-      redirect_to result.value!, notice: "Задача обновлена."
+      @task = result.value!
+
+      respond_to do |format|
+        format.turbo_stream do
+          if turbo_frame_request?
+            flash.now[:notice] = "Задача обновлена."
+          else
+            redirect_to @task, notice: "Задача обновлена."
+          end
+        end
+        format.html { redirect_to @task, notice: "Задача обновлена." }
+      end
     else
       @task = result.failure
-      render :edit, status: :unprocessable_content
+      respond_to do |format|
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.replace("task_modal", template: "tasks/_modal_form", locals: { task: @task }),
+            status: :unprocessable_content
+        end
+        format.html { render :edit, status: :unprocessable_content }
+      end
+    end
+  end
+
+  def update_status
+    result = Tasks::Updater.call(task: @task, task_params: { status: params[:status] })
+
+    if result.success?
+      @task = result.value!
+      respond_to do |format|
+        format.turbo_stream
+        format.html { redirect_to tasks_url, notice: "Статус обновлён." }
+      end
+    else
+      redirect_to tasks_url, alert: "Не удалось изменить статус."
     end
   end
 
   def destroy
-    Tasks::Destroyer.call(task: @task)
+    @task = Tasks::Destroyer.call(task: @task).value!
 
-    redirect_to tasks_url, notice: "Задача удалена."
+    respond_to do |format|
+      format.turbo_stream do
+        flash.now[:notice] = "Задача удалена."
+      end
+      format.html { redirect_to tasks_url, notice: "Задача удалена." }
+    end
   end
 
   private
@@ -51,5 +104,9 @@ class TasksController < ApplicationController
 
   def task_params
     params.require(:task).permit(:title, :description, :status, :priority, :deadline)
+  end
+
+  def turbo_frame_request?
+    request.headers["Turbo-Frame"].present?
   end
 end

@@ -1,0 +1,17 @@
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-4"
+     data-controller="modal"
+     data-action="click->modal#backdropClose keydown.esc@window->modal#close">
+  <div class="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-2xl bg-white p-6 shadow-xl animate-fade-in"
+       data-modal-target="dialog">
+    <div class="mb-4 flex items-center justify-between">
+      <h2 class="text-lg font-semibold text-slate-900">
+        <%= task.new_record? ? "Новая задача" : "Редактирование задачи" %>
+      </h2>
+      <button type="button"
+              class="text-2xl leading-none text-slate-400 transition-colors hover:text-slate-600"
+              data-action="modal#close"
+              aria-label="Закрыть">&times;</button>
+    </div>
+    <%= yield %>
+  </div>
+</div>

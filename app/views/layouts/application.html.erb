@@ -18,18 +18,32 @@
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
 
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
+    <%# Includes all stylesheet files in app/assets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
-    <% flash.each do |type, message| %>
-      <div class="flash flash-<%= type %>">
-        <%= message %>
-      </div>
-    <% end %>
+  <body class="min-h-screen bg-slate-50 text-slate-800 antialiased">
+    <header class="bg-white shadow-sm">
+      <nav class="mx-auto flex max-w-5xl items-center gap-6 px-5 py-4">
+        <%= link_to "Task Manager", root_path, class: "text-lg font-bold text-slate-900" %>
+        <div class="flex gap-4 text-sm font-medium">
+          <%= link_to "Главная", root_path,
+            class: "px-3 py-1.5 rounded-lg transition-colors " + (current_page?(root_path) ? "bg-indigo-50 text-indigo-700" : "text-slate-600 hover:text-slate-900") %>
+          <%= link_to "Задачи", tasks_path,
+            class: "px-3 py-1.5 rounded-lg transition-colors " + (controller_name == "tasks" ? "bg-indigo-50 text-indigo-700" : "text-slate-600 hover:text-slate-900") %>
+        </div>
+      </nav>
+    </header>
 
-    <%= yield %>
+    <div id="flash">
+      <% flash.each do |type, message| %>
+        <%= render "layouts/flash_message", type: type, message: message %>
+      <% end %>
+    </div>
+
+    <main class="mx-auto max-w-5xl px-5 py-8">
+      <%= yield %>
+    </main>
   </body>
 </html>
