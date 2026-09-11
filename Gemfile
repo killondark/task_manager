@@ -19,6 +19,10 @@ gem "jbuilder"
 # json 3.x is incompatible with ActiveSupport::JSON.decode positional args on Ruby 3.3
 gem "json", "~> 2.7"
 
+# Functional abstractions and input validation for the interactor layer
+gem "dry-monads"
+gem "dry-validation", "~> 1.8"
+
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 # gem "bcrypt", "~> 3.1.7"
 
@@ -57,6 +61,8 @@ group :development, :test do
 
   # Behavior-driven testing framework
   gem "rspec-rails"
+
+  gem "pry-byebug"
 end
 
 group :development do

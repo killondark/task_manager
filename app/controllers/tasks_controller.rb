@@ -13,11 +13,12 @@ class TasksController < ApplicationController
   end
 
   def create
-    @task = Task.new(task_params)
+    result = Tasks::Creator.call(task_params: task_params.to_h)
 
-    if @task.save
-      redirect_to @task, notice: "Задача создана."
+    if result.success?
+      redirect_to result.value!, notice: "Задача создана."
     else
+      @task = result.failure
       render :new, status: :unprocessable_content
     end
   end
@@ -26,15 +27,18 @@ class TasksController < ApplicationController
   end
 
   def update
-    if @task.update(task_params)
-      redirect_to @task, notice: "Задача обновлена."
+    result = Tasks::Updater.call(task: @task, task_params: task_params.to_h)
+
+    if result.success?
+      redirect_to result.value!, notice: "Задача обновлена."
     else
+      @task = result.failure
       render :edit, status: :unprocessable_content
     end
   end
 
   def destroy
-    @task.destroy
+    Tasks::Destroyer.call(task: @task)
 
     redirect_to tasks_url, notice: "Задача удалена."
   end
