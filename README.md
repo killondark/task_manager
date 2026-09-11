@@ -1,24 +1,39 @@
-# README
+# Task Manager
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Менеджер задач на Ruby, построенный с использованием спецификаций OpenSpec.
 
-Things you may want to cover:
+Стек: Ruby 3.3.1, Rails, SQLite, Hotwire (Turbo + Stimulus), Tailwind CSS, RSpec.
 
-* Ruby version
+## Возможности
 
-* System dependencies
+- Полный CRUD задач
+- Статусы: todo, in_progress, done
+- Фильтрация по статусу и приоритету
+- Дашборд со счётчиками и прогрессом
+- Модальные формы через Turbo Frame и обновление списка через Turbo Stream
+- Бизнес-логика в интеракторах (dry-* gems)
 
-* Configuration
+## Запуск
 
-* Database creation
+```sh
+bin/setup
+bin/dev
+```
 
-* Database initialization
+Тесты:
 
-* How to run the test suite
+```sh
+rspec
+```
 
-* Services (job queues, cache servers, search engines, etc.)
+## Работа по OpenSpec
 
-* Deployment instructions
+Проект развивается через спецификации. `openspec/specs/` — источник правды: каждый аспект поведения описан требованиями в capability-спеках.
 
-* ...
+Изменения вносятся через процесс change:
+
+1. `opsx-explore` — исследовать задачу или уточнить требования
+2. `opsx-propose` — сформировать предложение (proposal, design, задачи)
+3. `opsx-apply` — реализовать по задачам из плана
+4. `opsx-sync` — синхронизировать delta-спеки с основными
+5. `opsx-archive` — заархивировать завершённый change
