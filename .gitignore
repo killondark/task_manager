@@ -3,3 +3,6 @@ storage/*
 tmp/*
 /app/assets/builds/*
 !/app/assets/builds/.keep
+
+config/master.key
+config/credentials/*.key
