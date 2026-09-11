@@ -9,8 +9,9 @@ schema: spec-driven
 #     We use conventional commits
 #     Domain: e-commerce platform
 context: |
-  Технологический стек: Ruby on Rails
-  Пиши все артефакты на русском языке
+  Технологический стек: Ruby 3.3.1 (asdf, локальный .tool-versions), Rails 8, SQLite, Hotwire (Turbo + Stimulus), RSpec.
+  Full-stack веб-приложение (не API-only): server-rendered ERB + Turbo.
+  Пиши все артефакты на русском языке.
 
 # Per-artifact rules (optional)
 # Add custom rules for specific artifacts.
