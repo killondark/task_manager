@@ -19,7 +19,7 @@ gem "stimulus-rails"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 # json 3.x is incompatible with ActiveSupport::JSON.decode positional args on Ruby 3.3
-gem "json", "~> 2.7"
+gem "json", "~> 3.0"
 
 # Functional abstractions and input validation for the interactor layer
 gem "dry-monads"
